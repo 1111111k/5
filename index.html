@@ -34,7 +34,7 @@
         .email-button:hover {
             background-color: #037832;
         }
-        #current-datetime {
+        #current-datetime, #japan-datetime {
             margin-top: 20px;
             font-size: 18px;
         }
@@ -46,6 +46,7 @@
         <a href="mailto:rarity.spawns_5q@icloud.com" class="email-button">メールを送る</a>
         <p>チャオ！よろしくお願いします。YOLO</p>
         <div id="current-datetime"></div>
+        <div id="japan-datetime"></div>
     </div>
 
     <script>
@@ -59,6 +60,17 @@
                 ('0' + now.getSeconds()).slice(-2);
 
             document.getElementById('current-datetime').innerText = formattedDateTime;
+
+            // 日本の時間を表示する
+            var japanTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Tokyo"}));
+            var formattedJapanDateTime = japanTime.getFullYear() + '-' +
+                ('0' + (japanTime.getMonth() + 1)).slice(-2) + '-' +
+                ('0' + japanTime.getDate()).slice(-2) + ' ' +
+                ('0' + japanTime.getHours()).slice(-2) + ':' +
+                ('0' + japanTime.getMinutes()).slice(-2) + ':' +
+                ('0' + japanTime.getSeconds()).slice(-2);
+
+            document.getElementById('japan-datetime').innerText = "日本の時間: " + formattedJapanDateTime;
         }
 
         updateDateTime();
