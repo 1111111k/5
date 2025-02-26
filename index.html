@@ -51,6 +51,10 @@
         .message .content {
             margin-top: 5px;
         }
+        .message .timestamp {
+            font-size: 12px;
+            color: #888;
+        }
     </style>
 </head>
 <body>
@@ -97,8 +101,8 @@
         setInterval(updateDateTime, 1000);
 
         const messages = [
-            { author: "太郎", content: "こんにちは！" },
-            { author: "花子", content: "お元気ですか？" }
+            { author: "太郎", content: "こんにちは！", timestamp: "2025-02-26 17:57:26" },
+            { author: "花子", content: "お元気ですか？", timestamp: "2025-02-26 17:58:00" }
         ];
 
         function renderMessages() {
@@ -110,6 +114,7 @@
                 messageDiv.innerHTML = `
                     <div class="author">${message.author}</div>
                     <div class="content">${message.content}</div>
+                    <div class="timestamp">${message.timestamp}</div>
                 `;
                 messagesDiv.appendChild(messageDiv);
             });
@@ -119,7 +124,14 @@
             event.preventDefault();
             const author = document.getElementById('author').value;
             const content = document.getElementById('content').value;
-            messages.push({ author, content });
+            const now = new Date();
+            const timestamp = now.getFullYear() + '-' +
+                ('0' + (now.getMonth() + 1)).slice(-2) + '-' +
+                ('0' + now.getDate()).slice(-2) + ' ' +
+                ('0' + now.getHours()).slice(-2) + ':' +
+                ('0' + now.getMinutes()).slice(-2) + ':' +
+                ('0' + now.getSeconds()).slice(-2);
+            messages.push({ author, content, timestamp });
             renderMessages();
             document.getElementById('author').value = '';
             document.getElementById('content').value = '';
