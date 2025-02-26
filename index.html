@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+            color: #FFFFFF;
+        }
+        .profile-container {
+            text-align: center;
+        }
+        .email-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #FAF6F6;
+            background-color: #333333;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .email-button:hover {
+            background-color: #037832;
+        }
+        #current-datetime {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>1111111k</h1>
+        <a href="mailto:rarity.spawns_5q@icloud.com" class="email-button">メールを送る</a>
+        <p>チャオ！よろしくお願いします。YOLO</p>
+        <div id="current-datetime"></div>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            var now = new Date();
+            var formattedDateTime = now.getFullYear() + '-' +
+                ('0' + (now.getMonth() + 1)).slice(-2) + '-' +
+                ('0' + now.getDate()).slice(-2) + ' ' +
+                ('0' + now.getHours()).slice(-2) + ':' +
+                ('0' + now.getMinutes()).slice(-2) + ':' +
+                ('0' + now.getSeconds()).slice(-2);
+
+            document.getElementById('current-datetime').innerText = formattedDateTime;
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>
