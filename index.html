@@ -56,6 +56,23 @@
             color: #888;
         }
     </style>
+    <!-- Firebase SDKの追加 -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script>
+        // Firebaseの設定
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // Firebaseの初期化
+        firebase.initializeApp(firebaseConfig);
+    </script>
 </head>
 <body>
     <div class="profile-container">
@@ -85,7 +102,6 @@
 
             document.getElementById('current-datetime').innerText = formattedDateTime;
 
-            // 日本の時間を表示する
             var japanTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Tokyo"}));
             var formattedJapanDateTime = japanTime.getFullYear() + '-' +
                 ('0' + (japanTime.getMonth() + 1)).slice(-2) + '-' +
@@ -100,20 +116,13 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            return messages;
-        }
-
-        function saveMessages(messages) {
-            localStorage.setItem('messages', JSON.stringify(messages));
-        }
-
-        function renderMessages() {
-            const messages = loadMessages();
+        // Firebaseからメッセージを読み込む
+        firebase.database().ref('messages').on('value', function(snapshot) {
+            const messages = snapshot.val();
             const messagesDiv = document.getElementById('messages');
             messagesDiv.innerHTML = '';
-            messages.forEach(message => {
+            for (const id in messages) {
+                const message = messages[id];
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
                 messageDiv.innerHTML = `
@@ -122,9 +131,10 @@
                     <div class="timestamp">${message.timestamp}</div>
                 `;
                 messagesDiv.appendChild(messageDiv);
-            });
-        }
+            }
+        });
 
+        // メッセージをFirebaseに保存する
         document.getElementById('message-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const author = document.getElementById('author').value;
@@ -136,15 +146,14 @@
                 ('0' + now.getHours()).slice(-2) + ':' +
                 ('0' + now.getMinutes()).slice(-2) + ':' +
                 ('0' + now.getSeconds()).slice(-2);
-            const messages = loadMessages();
-            messages.push({ author, content, timestamp });
-            saveMessages(messages);
-            renderMessages();
+            firebase.database().ref('messages').push({
+                author,
+                content,
+                timestamp
+            });
             document.getElementById('author').value = '';
             document.getElementById('content').value = '';
         });
-
-        renderMessages();
     </script>
 </body>
 </html>
