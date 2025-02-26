@@ -100,12 +100,17 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        const messages = [
-            { author: "1111111k", content: "こんにちは！", timestamp: "2025-02-26 17:57:26" },
-            { author: "", content: "How are you doing", timestamp: "2025-02-26 17:58:00" }
-        ];
+        function loadMessages() {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            return messages;
+        }
+
+        function saveMessages(messages) {
+            localStorage.setItem('messages', JSON.stringify(messages));
+        }
 
         function renderMessages() {
+            const messages = loadMessages();
             const messagesDiv = document.getElementById('messages');
             messagesDiv.innerHTML = '';
             messages.forEach(message => {
@@ -131,7 +136,9 @@
                 ('0' + now.getHours()).slice(-2) + ':' +
                 ('0' + now.getMinutes()).slice(-2) + ':' +
                 ('0' + now.getSeconds()).slice(-2);
+            const messages = loadMessages();
             messages.push({ author, content, timestamp });
+            saveMessages(messages);
             renderMessages();
             document.getElementById('author').value = '';
             document.getElementById('content').value = '';
