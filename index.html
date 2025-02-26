@@ -38,6 +38,19 @@
             margin-top: 20px;
             font-size: 18px;
         }
+        .message {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .message:last-child {
+            border-bottom: none;
+        }
+        .message .author {
+            font-weight: bold;
+        }
+        .message .content {
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +61,13 @@
         <div id="current-datetime"></div>
         <div id="japan-datetime"></div>
     </div>
+    <h2>掲示板</h2>
+    <div id="messages"></div>
+    <form id="message-form">
+        <input type="text" id="author" placeholder="名前" required>
+        <textarea id="content" placeholder="メッセージ" required></textarea>
+        <button type="submit">投稿</button>
+    </form>
 
     <script>
         function updateDateTime() {
@@ -75,6 +95,37 @@
 
         updateDateTime();
         setInterval(updateDateTime, 1000);
+
+        const messages = [
+            { author: "太郎", content: "こんにちは！" },
+            { author: "花子", content: "お元気ですか？" }
+        ];
+
+        function renderMessages() {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = '';
+            messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message';
+                messageDiv.innerHTML = `
+                    <div class="author">${message.author}</div>
+                    <div class="content">${message.content}</div>
+                `;
+                messagesDiv.appendChild(messageDiv);
+            });
+        }
+
+        document.getElementById('message-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const author = document.getElementById('author').value;
+            const content = document.getElementById('content').value;
+            messages.push({ author, content });
+            renderMessages();
+            document.getElementById('author').value = '';
+            document.getElementById('content').value = '';
+        });
+
+        renderMessages();
     </script>
 </body>
 </html>
