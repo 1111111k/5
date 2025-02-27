@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
-    <style><!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,14 +75,14 @@
 
     <script type="module">
         // FirebaseのCDNからモジュールをインポート
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
         // Firebaseの設定
         const firebaseConfig = {
             apiKey: "your-api-key",
             authDomain: "your-project-id.firebaseapp.com",
-            databaseURL: "https://your-project-id.firebaseio.com", // 正しいURLに置き換えてください
+            databaseURL: "https://your-project-id.firebaseio.com",
             projectId: "your-project-id",
             storageBucket: "your-project-id.appspot.com",
             messagingSenderId: "your-messaging-sender-id",
@@ -96,157 +90,10 @@
         };
 
         // Firebaseを初期化
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        function updateDateTime() {
-            var now = new Date();
-            var formattedDateTime = now.getFullYear() + '-' +
-                ('0' + (now.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + now.getDate()).slice(-2) + ' ' +
-                ('0' + now.getHours()).slice(-2) + ':' +
-                ('0' + now.getMinutes()).slice(-2) + ':' +
-                ('0' + now.getSeconds()).slice(-2);
-
-            document.getElementById('current-datetime').innerText = formattedDateTime;
-
-            var japanTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Tokyo"}));
-            var formattedJapanDateTime = japanTime.getFullYear() + '-' +
-                ('0' + (japanTime.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + japanTime.getDate()).slice(-2) + ' ' +
-                ('0' + japanTime.getHours()).slice(-2) + ':' +
-                ('0' + japanTime.getMinutes()).slice(-2) + ':' +
-                ('0' + japanTime.getSeconds()).slice(-2);
-
-            document.getElementById('japan-datetime').innerText = "日本の時間: " + formattedJapanDateTime;
+        if (!getApps().length) {
+            const app = initializeApp(firebaseConfig);
         }
-
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-
-        // Firebaseからメッセージを読み込む
-        const messagesRef = ref(database, 'messages');
-        onValue(messagesRef, (snapshot) => {
-            const messages = snapshot.val();
-            const messagesDiv = document.getElementById('messages');
-            messagesDiv.innerHTML = '';
-            for (const id in messages) {
-                const message = messages[id];
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                messageDiv.innerHTML = `
-                    <div class="author">${message.author ? message.author : "匿名"}</div>
-                    <div class="content">${message.content}</div>
-                    <div class="timestamp">${message.timestamp}</div>
-                `;
-                messagesDiv.appendChild(messageDiv);
-            }
-        });
-
-        // メッセージをFirebaseに保存する
-        document.getElementById('message-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const author = document.getElementById('author').value;
-            const content = document.getElementById('content').value;
-            const now = new Date();
-            const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
-            push(messagesRef, {
-                author,
-                content,
-                timestamp
-            });
-            document.getElementById('author').value = '';
-            document.getElementById('content').value = '';
-        });
-    </script>
-</body>
-</html>
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #121212;
-            color: #FFFFFF;
-        }
-        .profile-container {
-            text-align: center;
-        }
-        .email-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #FAF6F6;
-            background-color: #333333;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .email-button:hover {
-            background-color: #037832;
-        }
-        #current-datetime, #japan-datetime {
-            margin-top: 20px;
-            font-size: 18px;
-        }
-        .message {
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .message:last-child {
-            border-bottom: none;
-        }
-        .message .author {
-            font-weight: bold;
-        }
-        .message .content {
-            margin-top: 5px;
-        }
-        .message .timestamp {
-            font-size: 12px;
-            color: #888;
-        }
-    </style>
-</head>
-<body>
-    <div class="profile-container">
-        <h1>1111111k</h1>
-        <a href="mailto:rarity.spawns_5q@icloud.com" class="email-button">メールを送る</a>
-        <p>チャオ！Hello！YOLO！よろー</p>
-        <div id="current-datetime"></div>
-        <div id="japan-datetime"></div>
-    </div>
-    <h2>メッセージ</h2>
-    <div id="messages"></div>
-    <form id="message-form">
-        <input type="text" id="author" placeholder="名前">
-        <textarea id="content" placeholder="メッセージ" required></textarea>
-        <button type="submit">投稿</button>
-    </form>
-
-    <script type="module">
-        // FirebaseのCDNからモジュールをインポート
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-        // Firebaseの設定
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "https://YOUR_FIREBASE.firebaseio.com", // 正しいURLに置き換えてください
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Firebaseを初期化
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        const database = getDatabase();
 
         function updateDateTime() {
             var now = new Date();
